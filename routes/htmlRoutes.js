@@ -1,13 +1,10 @@
 var db = require("../models");
 
 module.exports = function(app) {
-
   // Load index page
   app.get("/", function(req, res) {
     db.Fortune.findOne({
-      order: [
-        db.Sequelize.fn('RAND')
-      ]
+      order: [db.Sequelize.fn("RAND")]
     }).then(function(data) {
       res.render("index", {
         text: data.text

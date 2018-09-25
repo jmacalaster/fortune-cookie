@@ -1,5 +1,5 @@
 {
-  "name": "default",
+  "name": "fortune-cookie",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -10,7 +10,7 @@
     "test": "npm run lint && NODE_ENV=test mocha -u tdd --reporter spec --exit"
   },
   "keywords": [],
-  "author": "",
+  "author": "Julia Macalaster, Kenneth Postigo, Evan Ross & Sandy Yeung",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^6.0.0",
