@@ -4,7 +4,7 @@ module.exports = function (sequelize, DataTypes) {
         address: DataTypes.STRING,
         platform: {
             type: DataTypes.STRING,
-            default: "Slack"
+            defaultValue: "Slack"
         }
     });
 
