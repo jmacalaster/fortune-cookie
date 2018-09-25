@@ -4,18 +4,24 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "eslint **/*.js --quiet",
+    "fix": "eslint --fix .",
+    "test": "npm run lint && NODE_ENV=test mocha -u tdd --reporter spec --exit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^6.0.0",
-    "eslint": "^5.6.0",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "mysql2": "^1.6.1",
     "sequelize": "^4.38.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^5.6.0",
+    "mocha": "^5.2.0"
   }
 }
