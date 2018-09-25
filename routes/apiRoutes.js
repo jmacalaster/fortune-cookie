@@ -20,7 +20,7 @@ module.exports = function (app) {
       include: {
         all: true
       }
-    }).then(function(data){
+    }).then(function (data) {
       res.json(data);
     });
   });
@@ -35,7 +35,7 @@ module.exports = function (app) {
         model: db.Fortune,
         as: 'fromUser'
       }
-    }).then(function(data){
+    }).then(function (data) {
       res.json(data);
     });
   });
@@ -50,12 +50,16 @@ module.exports = function (app) {
         model: db.Fortune,
         as: 'toUser'
       }
-    }).then(function(data){
+    }).then(function (data) {
       res.json(data);
     });
   });
 
   // Create a new user
+  // POST MUST INCLUDE:
+  // name       the user's first name (maybe not needed?)
+  // address    the email address or slack name or facebook name... 
+  // platform   the platform through which we'll contact the user (email/slack/facebook?)
   app.post("/api/users", function (req, res) {
     db.User.create(req.body).then(function (data) {
       res.json(data);
@@ -79,7 +83,7 @@ module.exports = function (app) {
       include: {
         all: true
       }
-    }).then(function(data){
+    }).then(function (data) {
       res.json(data);
     });
   });
@@ -94,7 +98,7 @@ module.exports = function (app) {
         model: db.User,
         as: 'fromUser'
       }
-    }).then(function(data){
+    }).then(function (data) {
       res.json(data);
     });
   });
@@ -109,15 +113,33 @@ module.exports = function (app) {
         model: db.User,
         as: 'toUser'
       }
-    }).then(function(data){
+    }).then(function (data) {
       res.json(data);
     });
   });
 
   // Create a new fortune
+  // POST BODY MUST INCLUDE:
+  // text         the text of the fortune
+  // fromUserId   the id of the user who sent the fortune
   app.post("/api/fortunes", function (req, res) {
-    db.Fortune.create(req.body).then(function (data) {
-      res.json(data);
+    db.User.findOne({
+      where: {
+        id: {
+          [db.Sequelize.Op.ne]: req.body.fromUserId
+        }
+      },
+      order: [
+        db.Sequelize.fn('RAND')
+      ]
+    }).then(function (randomUser) {
+      db.Fortune.create({
+        text: req.body.text,
+        fromUserId: req.body.fromUserId,
+        toUserId: randomUser.id
+      }).then(function (data) {
+        res.json(data);
+      });
     });
   });
 
