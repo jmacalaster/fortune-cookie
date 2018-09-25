@@ -1,1 +1,1 @@
-CREATE DATABASE database;
+CREATE DATABASE fortunes;
