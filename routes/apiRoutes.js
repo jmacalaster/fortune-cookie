@@ -122,12 +122,17 @@ module.exports = function (app) {
   // POST BODY MUST INCLUDE:
   // text         the text of the fortune
   // fromUserId   the id of the user who sent the fortune
-  app.post("/api/fortunes", function (req, res) {
+  app.post("/api/fortunes", function(req, res) {
     db.User.findOne({
       where: {
         id: {
           [db.Sequelize.Op.ne]: req.body.fromUserId
-        }
+        },
+        // TURNED OFF FOR TESTING: 
+        // In final production, we will want to choose a random user who hasn't been pinged in at least 18 hours (or so)
+        // updatedAt: {
+        //   [db.Sequelize.Op.lt]: new Date() - 18 * 60 * 60 * 1000
+        // }
       },
       order: [
         db.Sequelize.fn('RAND')
@@ -141,6 +146,20 @@ module.exports = function (app) {
         res.json(data);
       });
     });
+  });
+
+  app.put("/api/fortunes/:id/read", function(req, res) {
+    db.Fortune.update(
+      {
+        isRead: true
+      },
+      {
+        where: {
+          id: req.params.id
+        }
+      }).then(function(data){
+        res.json(data);
+      })
   });
 
 };
