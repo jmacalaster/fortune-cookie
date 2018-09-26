@@ -127,7 +127,7 @@ module.exports = function (app) {
       where: {
         id: {
           [db.Sequelize.Op.ne]: req.body.fromUserId
-        },
+        }//,
         // TURNED OFF FOR TESTING: 
         // In final production, we will want to choose a random user who hasn't been pinged in at least 18 hours (or so)
         // updatedAt: {
@@ -138,6 +138,7 @@ module.exports = function (app) {
         db.Sequelize.fn('RAND')
       ]
     }).then(function (randomUser) {
+      console.log(randomUser)
       db.Fortune.create({
         text: req.body.text,
         fromUserId: req.body.fromUserId,

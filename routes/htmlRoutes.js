@@ -21,7 +21,7 @@ module.exports = function(app) {
         });
       }
       else {
-        res.render("newFortune", {});
+        res.render("newFortune", { id: req.params.id, user: data.toUserId });
       }
     });
   });
