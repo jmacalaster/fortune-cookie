@@ -15,9 +15,14 @@ module.exports = function(app) {
   // Load one specific fortune (can add a different template later if needed)
   app.get("/fortunes/:id", function(req, res) {
     db.Fortune.findOne({ where: { id: req.params.id } }).then(function(data) {
-      res.render("index", {
-        text: data.text
-      });
+      if (data.isRead) {
+        res.render("index", {
+          text: data.text
+        });
+      }
+      else {
+        res.render("newFortune", { id: req.params.id, user: data.toUserId });
+      }
     });
   });
 

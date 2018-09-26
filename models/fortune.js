@@ -1,4 +1,4 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
   var Fortune = sequelize.define("Fortune", {
     text: DataTypes.STRING,
     isRead: {
@@ -7,7 +7,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   });
 
-  Fortune.associate = function (models) {
+  Fortune.associate = function(models) {
     Fortune.belongsTo(models.User, {
       as: "fromUser",
       foreignKey: "fromUserId"

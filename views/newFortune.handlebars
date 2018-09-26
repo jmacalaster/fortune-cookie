@@ -1,0 +1,31 @@
+<div class="form-group">
+  <label for="fortune-text" class="col-form-label">Please write someone's fortune to see your own:</label>
+  <textarea class="form-control" id="fortune-text"></textarea>
+</div> 
+<button id="save" type="button" class="btn btn-primary">Save fortune</button>
+<script>
+  $("#save").on("click", function() {
+  console.log("hello");
+  var text = $("#fortune-text")
+    .val()
+    .trim();
+  if (text !== "") {
+    $.ajax({
+      url: "/api/fortunes",
+      method: "POST",
+      data: {
+        text: text,
+        fromUserId: "{{user}}"
+      }
+    }).then(function() {
+      $.ajax({
+        url: "/api/fortunes/{{id}}/read",
+        method: "PUT",
+        data: {}
+      }).then(function() {
+        location.reload();
+      });
+    });
+  }
+})
+</script>
