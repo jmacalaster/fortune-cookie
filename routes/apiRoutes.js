@@ -144,6 +144,9 @@ module.exports = function (app) {
         fromUserId: req.body.fromUserId,
         toUserId: randomUser.id
       }).then(function (data) {
+
+        // Code to notify user based on platform goes here
+
         res.json(data);
       });
     });

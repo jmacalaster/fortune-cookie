@@ -7,7 +7,8 @@ module.exports = function(app) {
       order: [db.Sequelize.fn("RAND")]
     }).then(function(data) {
       res.render("index", {
-        text: data.text
+        text: data.text,
+        user: data.toUserId
       });
     });
   });
@@ -21,7 +22,10 @@ module.exports = function(app) {
         });
       }
       else {
-        res.render("newFortune", { id: req.params.id, user: data.toUserId });
+        res.render("newFortune", {
+          id: req.params.id,
+          user: data.toUserId
+        });
       }
     });
   });
