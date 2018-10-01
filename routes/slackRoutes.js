@@ -5,8 +5,9 @@ var env_token = process.env.BOT_ACCESS_TOKEN
 
 module.exports = function(app) {
   app.post("/slack/actions/submit", (req, res)=> {
-    var text = req.body.payload.submission.newFortune;
-    var user = req.body.payload.user.id;
+    var text = req.body.submission.newFortune;
+    var user = req.body.user.id;
+    console.log(text);
     db.User.findOne({
       where: {
         address: user
