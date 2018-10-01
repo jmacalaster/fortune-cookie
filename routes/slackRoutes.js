@@ -5,7 +5,31 @@ var env_token = process.env.BOT_ACCESS_TOKEN
 
 module.exports = function(app) {
   app.post("/slack/actions/submit", (req, res)=> {
-    console.log(req.body);
+    var text = req.body.payload.submission.newFortune;
+    var user = req.body.payload.user.id;
+    db.User.findOne({
+      where: {
+        address: user
+      }
+    }).then(function(data){
+      if (data){
+        db.Fortune.create({
+          text: text,
+          fromUserId: data.id
+        }).then(function(dbFortune){
+          return res.status(200).json({
+            "response_type": "in_channel",
+            "text": "Your fortune is created!"
+          });
+        });
+      }
+      else{
+        return res.status(200).json({
+          "response_type": "ephemeral",
+          "text": "You haven't signed up for Fortune Cookie yet! Type /signup to do so!"
+        });
+      }
+    })
   });
   
   app.post("/slack/commands/signup", (req, res) => {
