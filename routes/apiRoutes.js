@@ -1,4 +1,5 @@
 var db = require("../models");
+var badWord = require("../lib/wordfilter.js")
 
 module.exports = function (app) {
 
@@ -139,8 +140,10 @@ module.exports = function (app) {
       ]
     }).then(function (randomUser) {
       console.log(randomUser)
+      var cleanWord = wordFilter(req.body.text);
+      console.log(cleanWord);
       db.Fortune.create({
-        text: req.body.text,
+        text: cleanWord,
         fromUserId: req.body.fromUserId,
         toUserId: randomUser.id
       }).then(function (data) {
