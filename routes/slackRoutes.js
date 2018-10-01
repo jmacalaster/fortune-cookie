@@ -8,7 +8,6 @@ module.exports = function(app) {
     var payload = JSON.parse(req.body.payload)
     var text = payload.submission.newFortune;
     var user = payload.user.id;
-    return console.log(user + "     " + text);
     db.User.findOne({
       where: {
         address: user
