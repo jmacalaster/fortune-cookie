@@ -3,7 +3,7 @@ var db = require("../models");
 
 module.exports = function(app) {
   app.post("/slack/commands/signup", (req, res) => {
-    console.log("req received");
+    console.log(req);
     db.User.findOne({
       where: {
         address: req.user_id
@@ -17,6 +17,7 @@ module.exports = function(app) {
         address: req.user_id,
         platform: "slack"
       };
+      console.log(newUser);
       axios({
         method: "POST",
         url: "/api/users",
