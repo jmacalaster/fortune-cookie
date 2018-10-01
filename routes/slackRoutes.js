@@ -11,28 +11,22 @@ module.exports = function(app) {
       }
     }).then(function(data) {
       if (data) {
-        return res.status(400).send("User is already signed up.");
+        return res.status(200).json({
+          "response_type": "ephemeral",
+          "text": "You're already signed up! No need to do so again."
+        });
       }
       var newUser = {
         name: req.body.user_name,
         address: req.body.user_id,
         platform: "slack"
       };
-      res.status(200).send("Welcome to the Fortune Cookie family, " + newUser.name + "!");
-      //app.post("/api/users", function (req, res) {
-        db.User.create(newUser).then(function (data) {
-          console.log(data);
-          //res.json(data);
+      db.User.create(newUser).then(function (data) {
+        res.status(200).json({
+          "response_type": "in_channel",
+          "text": "Welcome to the Fortune Cookie family, " + data.name + "!"
         });
-      //});
-      
-      // axios({
-      //   method: "POST",
-      //   url: "/api/users",
-      //   data: newUser
-      // }).then(function() {
-      //   console.log("user " + newUser.address + " created");
-      // });
+      });
     });
   });
 
