@@ -32,7 +32,7 @@ module.exports = function(app) {
           db.Fortune.create({
             text: text,
             fromUserId: data.id,
-            toUserId: randomUser
+            toUserId: randomUser.id
           }).then(function(dbFortune){
             return res.status(200).json({
               "response_type": "in_channel",
