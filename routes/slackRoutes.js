@@ -3,18 +3,18 @@ var db = require("../models");
 
 module.exports = function(app) {
   app.post("/slack/commands/signup", (req, res) => {
-    console.log(req);
+    console.log(req.body);
     db.User.findOne({
       where: {
-        address: req.user_id
+        address: req.body.user_id
       }
     }).then(function(data) {
       if (data) {
         return res.status(400).send("User is already signed up.");
       }
       var newUser = {
-        name: req.user_name,
-        address: req.user_id,
+        name: req.body.user_name,
+        address: req.body.user_id,
         platform: "slack"
       };
       console.log(newUser);
