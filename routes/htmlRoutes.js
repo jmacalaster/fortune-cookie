@@ -6,10 +6,18 @@ module.exports = function(app) {
     db.Fortune.findOne({
       order: [db.Sequelize.fn("RAND")]
     }).then(function(data) {
-      res.render("index", {
+      if (!data) {
+        res.render("index")
+      } else {
+       res.render("index", {
         text: data.text,
         user: data.toUserId
-      });
+       })
+      }
+      // res.render("index", {
+      //   text: data.text,
+      //   user: data.toUserId
+      // })
     });
   });
 

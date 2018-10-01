@@ -13,6 +13,7 @@
   "author": "Julia Macalaster, Kenneth Postigo, Evan Ross & Sandy Yeung",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
