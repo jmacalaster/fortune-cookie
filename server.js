@@ -20,6 +20,7 @@ var Slackbots = require("./lib/slackbot.js")
 
 require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);
+require("./routes/slackRoutes")(app);
 
 var db = require("./models");
 
