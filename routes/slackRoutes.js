@@ -5,14 +5,14 @@ var env_token = process.env.BOT_ACCESS_TOKEN
 
 module.exports = function(app) {
   app.post("/slack/commands/signup", (req, res) => {
-    db.User.findOne({
-      where: {
-        address: req.body.user_id
-      }
-    }).then(function(data) {
-      if (data) {
-        return res.status(400).send("User is already signed up.");
-      }
+    // db.User.findOne({
+    //   where: {
+    //     address: req.body.user_id
+    //   }
+    // }).then(function(data) {
+    //   if (data) {
+    //     return res.status(400).send("User is already signed up.");
+    //   }
       var newUser = {
         name: req.body.user_name,
         address: req.body.user_id,
@@ -26,7 +26,7 @@ module.exports = function(app) {
       }).then(function() {
         console.log("user " + newUser.address + " created");
       });
-    });
+    //});
   });
 
   app.post("/slack/commands/create/fc", (req, res) => {
