@@ -1,9 +1,10 @@
 var axios = require("axios");
 var db = require("../models");
 
+var env_token = process.env.BOT_ACCESS_TOKEN
+
 module.exports = function(app) {
   app.post("/slack/commands/signup", (req, res) => {
-    console.log(req.body);
     db.User.findOne({
       where: {
         address: req.body.user_id
@@ -17,13 +18,13 @@ module.exports = function(app) {
         address: req.body.user_id,
         platform: "slack"
       };
-      console.log(newUser);
+      res.status(200).send("Welcome to the Fortune Cookie family, " + newUser.name + "!");
       axios({
         method: "POST",
         url: "/api/users",
         data: newUser
       }).then(function() {
-        return res.status(200).json(newUser);
+        console.log("user " + newUser.address + " created");
       });
     });
   });
@@ -35,7 +36,6 @@ module.exports = function(app) {
     console.log("req is: ")
     console.log(req.body)
     let { token, text, username, command, response_url, trigger_id, user_id, channel_name, channel_id} = req.body
-    let env_token = process.env.BOT_ACCESS_TOKEN
 
     axios.post(`https://slack.com/api/dialog.open`, {
       trigger_id,
