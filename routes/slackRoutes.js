@@ -19,12 +19,12 @@ module.exports = function(app) {
         platform: "slack"
       };
       res.status(200).send("Welcome to the Fortune Cookie family, " + newUser.name + "!");
-      app.post("/api/users", function (req, res) {
+      //app.post("/api/users", function (req, res) {
         db.User.create(newUser).then(function (data) {
           console.log(data);
           //res.json(data);
         });
-      });
+      //});
       
       // axios({
       //   method: "POST",
