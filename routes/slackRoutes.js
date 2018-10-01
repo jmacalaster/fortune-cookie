@@ -102,9 +102,6 @@ module.exports = function(app) {
     },
       { headers: { Authorization: `Bearer ${env_token}` }
     }).then(res => {
-      console.log(res.data)
-      console.log(res.config)
-      console.log(res.headers)
-      //send this data back and grab a fortune
+      res.status(200).send("");
     })
 })}
