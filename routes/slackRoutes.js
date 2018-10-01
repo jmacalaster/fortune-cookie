@@ -4,6 +4,10 @@ var db = require("../models");
 var env_token = process.env.BOT_ACCESS_TOKEN
 
 module.exports = function(app) {
+  app.post("/slack/actions/submit", (req, res)=> {
+    console.log(req.body);
+  });
+  
   app.post("/slack/commands/signup", (req, res) => {
     db.User.findOne({
       where: {
