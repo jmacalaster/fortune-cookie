@@ -123,13 +123,27 @@ module.exports = function (app) {
   // text         the text of the fortune
   // fromUserId   the id of the user who sent the fortune
   app.post("/api/fortunes", function(req, res) {
-    db.User.randomUser().then(function(randomUser) {
-      console.log(randomUser);
+    db.User.findOne({
+      where: {
+        id: {
+          [db.Sequelize.Op.ne]: req.body.fromUserId
+        }//,
+        // TURNED OFF FOR TESTING: 
+        // In final production, we will want to choose a random user who hasn't been pinged in at least 18 hours (or so)
+        // updatedAt: {
+        //   [db.Sequelize.Op.lt]: new Date() - 18 * 60 * 60 * 1000
+        // }
+      },
+      order: [
+        db.Sequelize.fn('RAND')
+      ]
+    }).then(function (randomUser) {
+      console.log(randomUser)
       db.Fortune.create({
         text: req.body.text,
         fromUserId: req.body.fromUserId,
         toUserId: randomUser.id
-      }).then(function(data) {
+      }).then(function (data) {
 
         // Code to notify user based on platform goes here
 

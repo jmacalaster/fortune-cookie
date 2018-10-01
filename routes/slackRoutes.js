@@ -14,7 +14,21 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
-        db.User.randomUser().then(function(randomUser) {
+        db.User.findOne({
+          where: {
+            id: {
+              [db.Sequelize.Op.ne]: req.body.fromUserId
+            }//,
+            // TURNED OFF FOR TESTING: 
+            // In final production, we will want to choose a random user who hasn't been pinged in at least 18 hours (or so)
+            // updatedAt: {
+            //   [db.Sequelize.Op.lt]: new Date() - 18 * 60 * 60 * 1000
+            // }
+          },
+          order: [
+            db.Sequelize.fn('RAND')
+          ]
+        }).then(function(randomUser) {
           db.Fortune.create({
             text: text,
             fromUserId: data.id,
