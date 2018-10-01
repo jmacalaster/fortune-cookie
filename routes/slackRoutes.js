@@ -3,6 +3,7 @@ var db = require("../models");
 
 module.exports = function(app) {
   app.post("/slack/commands/signup", function(req, res) {
+    console.log("req received");
     db.User.findOne({
       where: {
         address: req.user_id
