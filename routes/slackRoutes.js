@@ -17,7 +17,7 @@ module.exports = function(app) {
         db.User.findOne({
           where: {
             id: {
-              [db.Sequelize.Op.ne]: req.body.fromUserId
+              [db.Sequelize.Op.ne]: data.id
             }//,
             // TURNED OFF FOR TESTING: 
             // In final production, we will want to choose a random user who hasn't been pinged in at least 18 hours (or so)
