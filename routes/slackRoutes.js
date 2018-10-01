@@ -18,14 +18,14 @@ module.exports = function(app) {
         address: req.body.user_id,
         platform: "slack"
       };
-      res.status(200).send("Welcome to the Fortune Cookie family, " + newUser.name + "!");
-      axios({
-        method: "POST",
-        url: "/api/users",
-        data: newUser
-      }).then(function() {
-        console.log("user " + newUser.address + " created");
-      });
+      return res.status(200).send("Welcome to the Fortune Cookie family, " + newUser.name + "!");
+      // axios({
+      //   method: "POST",
+      //   url: "/api/users",
+      //   data: newUser
+      // }).then(function() {
+      //   console.log("user " + newUser.address + " created");
+      // });
     //});
   });
 
