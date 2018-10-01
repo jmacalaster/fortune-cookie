@@ -4,6 +4,49 @@ var db = require("../models");
 var env_token = process.env.BOT_ACCESS_TOKEN
 
 module.exports = function(app) {
+  app.post("/slack/actions/submit", (req, res)=> {
+    var payload = JSON.parse(req.body.payload)
+    var text = payload.submission.newFortune;
+    var user = payload.user.id;
+    db.User.findOne({
+      where: {
+        address: user
+      }
+    }).then(function(data){
+      if (data){
+        db.User.findOne({
+          where: {
+            id: {
+              [db.Sequelize.Op.ne]: data.id
+            }//,
+            // TURNED OFF FOR TESTING: 
+            // In final production, we will want to choose a random user who hasn't been pinged in at least 18 hours (or so)
+            // updatedAt: {
+            //   [db.Sequelize.Op.lt]: new Date() - 18 * 60 * 60 * 1000
+            // }
+          },
+          order: [
+            db.Sequelize.fn('RAND')
+          ]
+        }).then(function(randomUser) {
+          db.Fortune.create({
+            text: text,
+            fromUserId: data.id,
+            toUserId: randomUser.id
+          }).then(function(dbFortune){
+            return res.status(200).send("");
+          });
+        });
+      }
+      else{
+        return res.status(200).json({
+          "response_type": "ephemeral",
+          "text": "You haven't signed up for Fortune Cookie yet! Type /signup to do so!"
+        });
+      }
+    })
+  });
+  
   app.post("/slack/commands/signup", (req, res) => {
     db.User.findOne({
       where: {
@@ -56,9 +99,6 @@ module.exports = function(app) {
     },
       { headers: { Authorization: `Bearer ${env_token}` }
     }).then(res => {
-      console.log(res.data)
-      console.log(res.config)
-      console.log(res.headers)
-      //send this data back and grab a fortune
+      res.status(200).send("")
     })
 })}

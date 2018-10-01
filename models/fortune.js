@@ -17,6 +17,5 @@ module.exports = function(sequelize, DataTypes) {
       foreignKey: "toUserId"
     });
   };
-
   return Fortune;
 };
