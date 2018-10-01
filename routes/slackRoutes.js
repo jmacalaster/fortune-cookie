@@ -34,10 +34,7 @@ module.exports = function(app) {
             fromUserId: data.id,
             toUserId: randomUser.id
           }).then(function(dbFortune){
-            return res.status(200).json({
-              "response_type": "in_channel",
-              "text": "Your fortune is created!"
-            });
+            return res.status(200).send("");
           });
         });
       }
@@ -102,6 +99,6 @@ module.exports = function(app) {
     },
       { headers: { Authorization: `Bearer ${env_token}` }
     }).then(res => {
-      res.status(200).send("");
+      res.status(200).send("")
     })
 })}
