@@ -7,7 +7,7 @@ module.exports = function(app) {
   app.post("/slack/actions/submit", (req, res)=> {
     var text = req.body.submission.newFortune;
     var user = req.body.user.id;
-    console.log(text);
+    return console.log(user + "   " + text + "   " + req.body);
     db.User.findOne({
       where: {
         address: user
