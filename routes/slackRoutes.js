@@ -14,13 +14,16 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
-        db.Fortune.create({
-          text: text,
-          fromUserId: data.id
-        }).then(function(dbFortune){
-          return res.status(200).json({
-            "response_type": "in_channel",
-            "text": "Your fortune is created!"
+        db.User.randomUser().then(function(randomUser) {
+          db.Fortune.create({
+            text: text,
+            fromUserId: data.id,
+            toUserId: randomUser
+          }).then(function(dbFortune){
+            return res.status(200).json({
+              "response_type": "in_channel",
+              "text": "Your fortune is created!"
+            });
           });
         });
       }
