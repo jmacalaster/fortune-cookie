@@ -14,7 +14,7 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
-        console.log(req);
+        console.log(req.protocol + req.baseUrl);
         axios.post("/api/fortunes", {
           text: text,
           fromUserId: data.id
@@ -22,7 +22,7 @@ module.exports = function(app) {
           //console.log(response);
           res.status(200).send();
         }).catch(function(err){
-          console.error(err);
+          //console.error(err);
         });
       }
       else{
