@@ -14,8 +14,7 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
-        console.log(req.protocol + req.hostname);
-        axios.post("/api/fortunes", {
+        axios.post(req.protocol + "://" + req.hostname + "/api/fortunes", {
           text: text,
           fromUserId: data.id
         }).then(function(response){
