@@ -2,7 +2,6 @@ var axios = require("axios");
 var db = require("../models");
 
 var env_token = process.env.BOT_ACCESS_TOKEN;
-var base_url = process.env.BASE_URL;
 
 module.exports = function(app) {
   app.post("/slack/actions/submit", function (req, res) {
@@ -15,7 +14,7 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
-        axios.post(base_url + "api/fortunes", {
+        axios.post("/api/fortunes", {
           text: text,
           fromUserId: data.id
         }).then(function(response){
