@@ -1,10 +1,10 @@
 var axios = require("axios");
 var db = require("../models");
 
-var env_token = process.env.BOT_ACCESS_TOKEN
+var env_token = process.env.BOT_ACCESS_TOKEN;
 
 module.exports = function(app) {
-  app.post("/slack/actions/submit", (req, res)=> {
+  app.post("/slack/actions/submit", function (req, res) {
     var payload = JSON.parse(req.body.payload)
     var text = payload.submission.newFortune;
     var user = payload.user.id;
@@ -14,30 +14,14 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
-        db.User.findOne({
-          where: {
-            id: {
-              [db.Sequelize.Op.ne]: data.id
-            }//,
-            // TURNED OFF FOR TESTING: 
-            // In final production, we will want to choose a random user who hasn't been pinged in at least 18 hours (or so)
-            // updatedAt: {
-            //   [db.Sequelize.Op.lt]: new Date() - 18 * 60 * 60 * 1000
-            // }
-          },
-          order: [
-            db.Sequelize.fn('RAND')
-          ]
-        }).then(function(randomUser) {
-          var cleanWord = wordFilter(text);
-          console.log(cleanWord);
-          db.Fortune.create({
-            text: cleanWord,
-            fromUserId: data.id,
-            toUserId: randomUser.id
-          }).then(function(dbFortune){
-            return res.status(200).send("");
-          });
+        axios.post(req.protocol + "://" + req.hostname + "/api/fortunes", {
+          text: text,
+          fromUserId: data.id
+        }).then(function(response){
+          //console.log(response);
+          res.status(200).send();
+        }).catch(function(err){
+          //console.error(err);
         });
       }
       else{
@@ -76,11 +60,6 @@ module.exports = function(app) {
   });
 
   app.post("/slack/commands/create/fc", (req, res) => {
-    console.log(`
-      Slack /create works
-    `)
-    console.log("req is: ")
-    console.log(req.body)
     let { token, text, username, command, response_url, trigger_id, user_id, channel_name, channel_id} = req.body
 
     axios.post(`https://slack.com/api/dialog.open`, {
@@ -100,7 +79,7 @@ module.exports = function(app) {
       },
     },
       { headers: { Authorization: `Bearer ${env_token}` }
-    }).then(res => {
+    }).then(response => {
       res.status(200).send("")
     })
 })}
