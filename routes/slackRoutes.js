@@ -1,7 +1,8 @@
 var axios = require("axios");
 var db = require("../models");
 
-var env_token = process.env.BOT_ACCESS_TOKEN
+var env_token = process.env.BOT_ACCESS_TOKEN;
+var base_url = "https://fortune-cookie-bot.herokuapp.com/";
 
 module.exports = function(app) {
   app.post("/slack/actions/submit", (req, res)=> {
@@ -14,30 +15,15 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
-        db.User.findOne({
-          where: {
-            id: {
-              [db.Sequelize.Op.ne]: data.id
-            }//,
-            // TURNED OFF FOR TESTING: 
-            // In final production, we will want to choose a random user who hasn't been pinged in at least 18 hours (or so)
-            // updatedAt: {
-            //   [db.Sequelize.Op.lt]: new Date() - 18 * 60 * 60 * 1000
-            // }
-          },
-          order: [
-            db.Sequelize.fn('RAND')
-          ]
-        }).then(function(randomUser) {
-          var cleanWord = wordFilter(text);
-          console.log(cleanWord);
-          db.Fortune.create({
-            text: cleanWord,
-            fromUserId: data.id,
-            toUserId: randomUser.id
-          }).then(function(dbFortune){
-            return res.status(200).send("");
-          });
+        axios.post({
+          baseUrl: base_url,
+          url: "api/fortunes",
+          data: {
+            text: text,
+            fromUserId: data.id
+          }
+        }).then(function(response){
+          return res.status(200).send();
         });
       }
       else{
