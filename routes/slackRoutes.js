@@ -5,7 +5,7 @@ var env_token = process.env.BOT_ACCESS_TOKEN;
 var base_url = process.env.BASE_URL;
 
 module.exports = function(app) {
-  app.post("/slack/actions/submit", (req, res)=> {
+  app.post("/slack/actions/submit", function (req, res) {
     var payload = JSON.parse(req.body.payload)
     var text = payload.submission.newFortune;
     var user = payload.user.id;
@@ -23,7 +23,7 @@ module.exports = function(app) {
             fromUserId: data.id
           }
         }).then(function(response){
-          return res.status(200).send();
+          res.status(200).send();
         });
       }
       else{
@@ -62,11 +62,6 @@ module.exports = function(app) {
   });
 
   app.post("/slack/commands/create/fc", (req, res) => {
-    console.log(`
-      Slack /create works
-    `)
-    console.log("req is: ")
-    console.log(req.body)
     let { token, text, username, command, response_url, trigger_id, user_id, channel_name, channel_id} = req.body
 
     axios.post(`https://slack.com/api/dialog.open`, {
@@ -86,7 +81,7 @@ module.exports = function(app) {
       },
     },
       { headers: { Authorization: `Bearer ${env_token}` }
-    }).then(res => {
+    }).then(response => {
       res.status(200).send("")
     })
 })}
