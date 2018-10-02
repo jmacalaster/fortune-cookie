@@ -14,11 +14,12 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
+        console.log(req);
         axios.post("/api/fortunes", {
           text: text,
           fromUserId: data.id
         }).then(function(response){
-          console.log(response);
+          //console.log(response);
           res.status(200).send();
         }).catch(function(err){
           console.error(err);
