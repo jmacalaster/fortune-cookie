@@ -47,23 +47,23 @@ a:visited{
     width: 40px;
 }
 
-.fortune-container {
-    height: 800px;
-}
-
 .fortune-div {
-    height: 700px;
-    background-image: url("/assets/images/Fortune-Cookie-Gif.jpg");
-    background-size: 1036px 650px;
-    background-repeat: no-repeat;
+    position: relative;
+    text-align: center;
+    margin-top: 50px;
 }
 
-.get-fortune-page {
-    margin: 50px;
+.fortune-image {
+    height: 65%;
+    width: 65%;
 }
 
 .fortune-text {
-    padding: 230px;
-    font-size: 24pt;
+    font-size: 18pt;
     color: #FF6376;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-left: 120px;
 }
