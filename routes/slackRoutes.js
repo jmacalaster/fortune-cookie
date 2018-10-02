@@ -15,15 +15,14 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
-        axios.post({
-          baseUrl: base_url,
-          url: "api/fortunes",
-          data: {
-            text: text,
-            fromUserId: data.id
-          }
+        axios.post(base_url + "api/fortunes", {
+          text: text,
+          fromUserId: data.id
         }).then(function(response){
+          console.log(response);
           res.status(200).send();
+        }).catch(function(err){
+          console.error(err);
         });
       }
       else{
