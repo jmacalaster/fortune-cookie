@@ -7,17 +7,14 @@ module.exports = function(app) {
       order: [db.Sequelize.fn("RAND")]
     }).then(function(data) {
       if (!data) {
-        res.render("index")
-      } else {
-       res.render("index", {
-        text: data.text,
-        user: data.toUserId
-       })
+        res.render("index");
+      } 
+      else {
+        res.render("index", {
+          text: data.text,
+          user: data.toUserId
+        });
       }
-      // res.render("index", {
-      //   text: data.text,
-      //   user: data.toUserId
-      // })
     });
   });
 
@@ -40,6 +37,8 @@ module.exports = function(app) {
 
   // Render 404 page for any unmatched routes
   app.get("*", function(req, res) {
-    res.render("404");
+    res.render("index", {
+      text: "Error 404: Your fortune cannot be found."
+    });
   });
 };
