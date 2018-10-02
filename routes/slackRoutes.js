@@ -2,7 +2,7 @@ var axios = require("axios");
 var db = require("../models");
 
 var env_token = process.env.BOT_ACCESS_TOKEN;
-var base_url = "https://fortune-cookie-bot.herokuapp.com/";
+var base_url = process.env.BASE_URL;
 
 module.exports = function(app) {
   app.post("/slack/actions/submit", (req, res)=> {
