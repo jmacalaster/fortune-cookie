@@ -14,7 +14,7 @@ module.exports = function(app) {
       }
     }).then(function(data){
       if (data){
-        console.log(req.protocol + req.baseUrl);
+        console.log(req.protocol + req.hostname);
         axios.post("/api/fortunes", {
           text: text,
           fromUserId: data.id
