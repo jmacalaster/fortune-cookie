@@ -29,8 +29,10 @@ module.exports = function(app) {
             db.Sequelize.fn('RAND')
           ]
         }).then(function(randomUser) {
+          var cleanWord = wordFilter(text);
+          console.log(cleanWord);
           db.Fortune.create({
-            text: text,
+            text: cleanWord,
             fromUserId: data.id,
             toUserId: randomUser.id
           }).then(function(dbFortune){
