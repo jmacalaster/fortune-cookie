@@ -1,5 +1,6 @@
 var axios = require("axios");
 var db = require("../models");
+var bot = require("../lib/slackbot.js");
 
 var env_token = process.env.BOT_ACCESS_TOKEN;
 
@@ -21,19 +22,20 @@ module.exports = function (app) {
         }).then(function (response) {
           // New fortune posted with no error
           res.status(200).send();
+          bot.sendMessage(data.name, "Thank you for creating your very own fortune!");
           // Send a chat message in response
-          axios.post("https://slack.com/api/chat.postMessage", {
-            // channel_id,
-            channel: "DD1L7LRV3", //user,
-            text: "Thanks a bunch! You’re super awesome!"
-          },
-          {
-            headers: { Authorization: `Bearer ${env_token}` }
-          }).then(function (messageRes){
+          // axios.post("https://slack.com/api/chat.postMessage", {
+          //   // channel_id,
+          //   channel: user,
+          //   text: "Thanks a bunch! You’re super awesome!"
+          // },
+          // {
+          //   headers: { Authorization: `Bearer ${env_token}` }
+          // }).then(function (messageRes){
 
-          }).catch(function (err){
-            console.error(err);
-          });
+          // }).catch(function (err){
+          //   console.error(err);
+          // });
         }).catch(function (err) {
           console.error(err);
         });
