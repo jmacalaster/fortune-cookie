@@ -24,7 +24,7 @@ module.exports = function (app) {
           // Send a chat message in response
           axios.post("https://slack.com/api/chat.postMessage", {
             // channel_id,
-            channel: user,
+            channel: "DD1L7LRV3", //user,
             text: "Thanks a bunch! You’re super awesome!"
           },
           {
@@ -73,7 +73,7 @@ app.post("/slack/commands/signup", (req, res) => {
   });
 });
 
-app.post("/slack/commands/create/fc", (req, res) => {
+app.post("/slack/commands/create", (req, res) => {
   let { token, text, username, command, response_url, trigger_id, user_id, channel_name, channel_id } = req.body
 
   axios.post(`https://slack.com/api/dialog.open`, {
