@@ -20,22 +20,22 @@ module.exports = function (app) {
           text: text,
           fromUserId: data.id
         }).then(function (response) {
-          // New fortune posted with no error
+          console.log(response);
           res.status(200).send();
-          bot.sendMessage(data.name, "Thank you for creating your very own fortune!");
-          // Send a chat message in response
-          // axios.post("https://slack.com/api/chat.postMessage", {
-          //   // channel_id,
-          //   channel: user,
-          //   text: "Thanks a bunch! You’re super awesome!"
-          // },
-          // {
-          //   headers: { Authorization: `Bearer ${env_token}` }
-          // }).then(function (messageRes){
-
-          // }).catch(function (err){
-          //   console.error(err);
-          // });
+          db.Fortune.findOne({
+            where: {
+              toUserId: data.id,
+              isRead: false
+            }
+          }).then(function (fortuneData){
+            if(fortuneData){
+              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you...\n" + fortuneData.text);
+              axios.put(req.protocol + "://" + req.hostname + "/api/fortunes/" + fortuneData.id + "/read");
+            }
+            else{
+              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nThere are none currently waiting for you, but if the fates conspire to bring you one, we'll let you know.");
+            }
+          });
         }).catch(function (err) {
           console.error(err);
         });
