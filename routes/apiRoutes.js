@@ -154,19 +154,26 @@ module.exports = function (app) {
             where: {
               id: req.body.fromUserId
             }
-          }).then(function(sentUserData){
-            console.log("SENT USER    " + sentUserData);
           });
+        db.User.update(
+            {
+              canReceive: false
+            },
+            {
+              where: {
+                id: recipientId
+              }
+            });
         db.Fortune.findOne({
             where: {
               toUserId: req.body.fromUserId,
               isRead: false
             }
           }).then(function(unreadFortuneData){
+            // UPDATE fortune to be read
             console.log("UNREAD FORTUNE     " + unreadFortuneData);
+            // Code to notify user based on platform goes here
           });
-        // Code to notify user based on platform goes here
-
         res.json(data);
       });
     });
