@@ -25,6 +25,14 @@ require("./routes/slackRoutes")(app);
 
 var db = require("./models");
 
+// db.User.create({
+//   name: "site",
+//   address: "cookie",
+//   platform: "web"
+// }).then(function(data){
+
+// })
+
 var syncOptions = { force: false };
 
 if (process.env.NODE_ENV === "test") {
