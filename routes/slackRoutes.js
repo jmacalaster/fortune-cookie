@@ -3,7 +3,7 @@ var db = require("../models");
 var bot = require("../lib/slackbot.js");
 
 var env_token = process.env.BOT_ACCESS_TOKEN;
-var cookie_line = "\n:fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie:\n"
+var cookie_line = "\n\n:fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie:\n"
 
 module.exports = function (app) {
   app.post("/slack/actions/submit", function (req, res) {
@@ -30,7 +30,7 @@ module.exports = function (app) {
             }
           }).then(function (fortuneData){
             if(fortuneData){
-              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you..." + cookie_line + fortuneData.text + cookie_line);
+              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you..." + cookie_line + fortuneData.text + "\n\n");
               axios.put(req.protocol + "://" + req.hostname + "/api/fortunes/" + fortuneData.id + "/read");
             }
             else{
