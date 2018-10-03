@@ -128,26 +128,52 @@ module.exports = function (app) {
       where: {
         id: {
           [db.Sequelize.Op.ne]: req.body.fromUserId
-        }//,
-        // TURNED OFF FOR TESTING: 
-        // In final production, we will want to choose a random user who hasn't been pinged in at least 18 hours (or so)
-        // updatedAt: {
-        //   [db.Sequelize.Op.lt]: new Date() - 18 * 60 * 60 * 1000
-        // }
+        },
+        canReceive: true
       },
       order: [
         db.Sequelize.fn('RAND')
       ]
     }).then(function (randomUser) {
+      console.log("RANDOM USER   " + randomUser);
+      var recipientId = 1;
+      if(randomUser){
+        recipientId = randomUser.id;
+      }
       var cleanWord = wordFilter(req.body.text);
       db.Fortune.create({
         text: cleanWord,
         fromUserId: req.body.fromUserId,
-        toUserId: randomUser.id
+        toUserId: recipientId
       }).then(function (data) {
-
-        // Code to notify user based on platform goes here
-
+        db.User.update(
+          {
+            canReceive: true
+          },
+          {
+            where: {
+              id: req.body.fromUserId
+            }
+          });
+        db.User.update(
+            {
+              canReceive: false
+            },
+            {
+              where: {
+                id: recipientId
+              }
+            });
+        db.Fortune.findOne({
+            where: {
+              toUserId: req.body.fromUserId,
+              isRead: false
+            }
+          }).then(function(unreadFortuneData){
+            // UPDATE fortune to be read
+            console.log("UNREAD FORTUNE     " + unreadFortuneData);
+            // Code to notify user based on platform goes here
+          });
         res.json(data);
       });
     });

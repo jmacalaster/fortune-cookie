@@ -5,6 +5,10 @@ module.exports = function(sequelize, DataTypes) {
     platform: {
       type: DataTypes.STRING,
       defaultValue: "Slack"
+    },
+    canReceive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   });
 
