@@ -1,14 +1,20 @@
 var db = require("../models");
 
 module.exports = function(app) {
-  // Load index page
+  // Load index page with random fortune sent to dummy user
   app.get("/", function(req, res) {
     db.Fortune.findOne({
+      where: {
+        toUserId: 1
+      },
       order: [db.Sequelize.fn("RAND")]
     }).then(function(data) {
       if (!data) {
-        res.render("index");
-      } 
+        res.render("index", {
+          text: "This is not the fortune you are looking for.",
+          user: 0
+        });
+      }
       else {
         res.render("index", {
           text: data.text,

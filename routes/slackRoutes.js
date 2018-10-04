@@ -15,7 +15,7 @@ function luckyNumbers(user){
 }
 
 function learnChinese(user){
-  //if(Math.random()<0.9){ return; } // The user will receive a "Learn Chinese" message only 10% of the time.
+  if(Math.random()<0.9){ return; } // The user will receive a "Learn Chinese" message only 10% of the time.
   var lesson = Math.floor(Math.random()*382); // There are 382 possible lessons in the database
   axios.get("http://fortunecookieapi.herokuapp.com/v1/lessons?limit=1&skip=" + lesson).then(function(response){
     var data = response.data[0];
@@ -40,14 +40,15 @@ module.exports = function (app) {
           text: text,
           fromUserId: data.id
         }).then(function (response) {
-          console.log(response);
           res.status(200).send();
+          // Check if the user has unread fortunes waiting
           db.Fortune.findOne({
             where: {
               toUserId: data.id,
               isRead: false
             }
           }).then(function (fortuneData){
+            // If they have an unread fortune waiting, send it and mark it as read.
             if(fortuneData){
               bot.postMessageToUser(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you..." + cookie_line + fortuneData.text + "\n\n").then(function(){
                 luckyNumbers(data.name);
@@ -55,6 +56,7 @@ module.exports = function (app) {
               });
               axios.put(req.protocol + "://" + req.hostname + "/api/fortunes/" + fortuneData.id + "/read");
             }
+            // Otherwise, tell them to be patient
             else{
               bot.postMessageToUser(data.name, "Your fortune has been sent to another user!\nThere are none currently waiting for you, but if the fates conspire to bring you one, we'll let you know.");
             }
