@@ -36,7 +36,8 @@ db.sequelize.sync(syncOptions).then(function() {
     db.User.create({
       name: "site",
       address: "cookie",
-      platform: "web"
+      platform: "web",
+      canReceive: false
     }).then(function() {
       db.Fortune.bulkCreate([
         {
