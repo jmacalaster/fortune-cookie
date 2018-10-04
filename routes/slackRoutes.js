@@ -5,6 +5,17 @@ var bot = require("../lib/slackbot.js");
 var env_token = process.env.BOT_ACCESS_TOKEN;
 var cookie_line = "\n\n:fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie:\n"
 
+function luckyNumbers(user){
+  //if(Math.random()<0.9){ return; }
+  var numbers = [];
+  for(var i=0; i<6; i++){
+    numbers.push(Math.floor(Math.random()*99)+1);
+  }
+  bot.sendMessage(user, cookie_line + "Your lucky numbers: " + numbers);
+}
+
+
+
 module.exports = function (app) {
   app.post("/slack/actions/submit", function (req, res) {
     var payload = JSON.parse(req.body.payload)
@@ -32,6 +43,8 @@ module.exports = function (app) {
             if(fortuneData){
               bot.sendMessage(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you..." + cookie_line + fortuneData.text + "\n\n");
               axios.put(req.protocol + "://" + req.hostname + "/api/fortunes/" + fortuneData.id + "/read");
+              luckyNumbers(data.name);
+              learnChinese(data.name);
             }
             else{
               bot.sendMessage(data.name, "Your fortune has been sent to another user!\nThere are none currently waiting for you, but if the fates conspire to bring you one, we'll let you know.");
@@ -70,7 +83,7 @@ app.post("/slack/commands/signup", (req, res) => {
     db.User.create(newUser).then(function (data) {
       res.status(200).json({
         "response_type": "in_channel",
-        "text": "Welcome to the Fortune Cookie family, " + data.name + "!"
+        "text": "Welcome to the Fortune Cookie family, " + data.name + "! :fortune_cookie:\nA fortune may be on its way soon enough..."
       });
     });
   });
