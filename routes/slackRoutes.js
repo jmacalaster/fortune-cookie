@@ -5,6 +5,25 @@ var bot = require("../lib/slackbot.js");
 var env_token = process.env.BOT_ACCESS_TOKEN;
 var cookie_line = "\n\n:fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie:\n"
 
+function luckyNumbers(user){
+  if(Math.random()<0.9){ return; } // The user will receive a "Lucky Numbers" message only 10% of the time.
+  var numbers = [];
+  for(var i=0; i<6; i++){
+    numbers.push(Math.floor(Math.random()*99)+1);
+  }
+  bot.postMessageToUser(user, cookie_line + "Your lucky numbers: " + numbers.join(", "));
+}
+
+function learnChinese(user){
+  if(Math.random()<0.9){ return; } // The user will receive a "Learn Chinese" message only 10% of the time.
+  var lesson = Math.floor(Math.random()*382); // There are 382 possible lessons in the database
+  axios.get("http://fortunecookieapi.herokuapp.com/v1/lessons?limit=1&skip=" + lesson).then(function(response){
+    var data = response.data[0];
+    bot.postMessageToUser(user, cookie_line +
+        "Learn Chinese!\n" + data.chinese + "\n" + data.pronunciation + "\n" + data.english);
+    });
+}
+
 module.exports = function (app) {
   app.post("/slack/actions/submit", function (req, res) {
     var payload = JSON.parse(req.body.payload)
@@ -16,25 +35,34 @@ module.exports = function (app) {
       }
     }).then(function (data) {
       if (data) {
+        if(text.trim()===""){
+          bot.postMessageToUser(data.name, "Your fortune cannot be empty!");
+          return;
+        }
         // Post new fortune
         axios.post(req.protocol + "://" + req.hostname + "/api/fortunes", {
           text: text,
           fromUserId: data.id
         }).then(function (response) {
-          console.log(response);
           res.status(200).send();
+          // Check if the user has unread fortunes waiting
           db.Fortune.findOne({
             where: {
               toUserId: data.id,
               isRead: false
             }
           }).then(function (fortuneData){
+            // If they have an unread fortune waiting, send it and mark it as read.
             if(fortuneData){
-              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you..." + cookie_line + fortuneData.text + "\n\n");
+              bot.postMessageToUser(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you..." + cookie_line + fortuneData.text + "\n\n").then(function(){
+                luckyNumbers(data.name);
+                learnChinese(data.name);
+              });
               axios.put(req.protocol + "://" + req.hostname + "/api/fortunes/" + fortuneData.id + "/read");
             }
+            // Otherwise, tell them to be patient
             else{
-              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nThere are none currently waiting for you, but if the fates conspire to bring you one, we'll let you know.");
+              bot.postMessageToUser(data.name, "Your fortune has been sent to another user!\nThere are none currently waiting for you, but if the fates conspire to bring you one, we'll let you know.");
             }
           });
         }).catch(function (err) {
@@ -70,7 +98,7 @@ app.post("/slack/commands/signup", (req, res) => {
     db.User.create(newUser).then(function (data) {
       res.status(200).json({
         "response_type": "in_channel",
-        "text": "Welcome to the Fortune Cookie family, " + data.name + "!"
+        "text": "Welcome to the Fortune Cookie family, " + data.name + "! :fortune_cookie:\nA fortune may be on its way soon enough..."
       });
     });
   });

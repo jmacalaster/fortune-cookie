@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     canReceive: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false
+      defaultValue: true
     }
   });
 

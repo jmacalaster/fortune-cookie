@@ -126,6 +126,7 @@ module.exports = function (app) {
   // text         the text of the fortune
   // fromUserId   the id of the user who sent the fortune
   app.post("/api/fortunes", function(req, res) {
+    // Find a random user to send it to
     db.User.findOne({
       where: {
         id: {
@@ -137,17 +138,30 @@ module.exports = function (app) {
         db.Sequelize.fn('RAND')
       ]
     }).then(function (randomUser) {
-      console.log("RANDOM USER   " + randomUser);
+      // If no user is chosen, default to dummy user #1 (fortunes posted to the website)
       var recipientId = 1;
       if(randomUser){
         recipientId = randomUser.id;
       }
+      // Filter the input for swear words! This is a family app!
       var cleanWord = wordFilter(req.body.text);
       db.Fortune.create({
         text: cleanWord,
         fromUserId: req.body.fromUserId,
         toUserId: recipientId
       }).then(function (data) {
+        // Notify user based on platform
+        if(recipientId!==1){
+          if(randomUser.platform==="slack"){
+            slackbot.postMessageToUser(randomUser.name, "You have a fortune waiting for you...\nType slash create to send someone else a fortune before you can read yours!")
+          }
+          else if(randomUser.plaform==="email"){
+            // TODO: notify email user here
+
+
+          }
+        }
+        // The user who sent the fortune can now receive a new one.
         db.User.update(
           {
             canReceive: true
@@ -157,32 +171,14 @@ module.exports = function (app) {
               id: req.body.fromUserId
             }
           });
+        // The user who received it can no longer receive a new one.
         db.User.update(
-            {
-              canReceive: false
-            },
-            {
-              where: {
-                id: recipientId
-              }
-            });
-        db.Fortune.findOne({
+          {
+            canReceive: false
+          },
+          {
             where: {
-              toUserId: req.body.fromUserId,
-              isRead: false
-            }
-          }).then(function(unreadFortuneData){
-            console.log("UNREAD FORTUNE     " + unreadFortuneData);
-            // Code to notify user based on platform goes here
-            if(recipientId!==1){
-              if(randomUser.platform==="slack"){
-                slackbot.sendMessage(randomUser.name, "You have a fortune waiting for you...\nType slash create to send someone else a fortune before you can read yours!")
-              }
-              else if(randomUser.plaform==="email"){
-                // Code to notify email user here
-
-
-              }
+              id: recipientId
             }
           });
         res.json(data);

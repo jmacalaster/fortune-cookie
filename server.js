@@ -15,10 +15,6 @@ var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-//Slackbots Dependency.
-//var Slackbots = require("./lib/slackbot.js");
-//console.log(Slackbots);
-
 require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);
 require("./routes/slackRoutes")(app);
@@ -36,7 +32,8 @@ db.sequelize.sync(syncOptions).then(function() {
     db.User.create({
       name: "site",
       address: "cookie",
-      platform: "web"
+      platform: "web",
+      canReceive: false
     }).then(function() {
       db.Fortune.bulkCreate([
         {
