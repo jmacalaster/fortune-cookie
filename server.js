@@ -32,51 +32,53 @@ if (process.env.NODE_ENV === "test") {
 }
 
 db.sequelize.sync(syncOptions).then(function() {
-  db.User.create({
-    name: "site",
-    address: "cookie",
-    platform: "web"
-  }).then(function() {
-    db.Fortune.bulkCreate([
-      {
-        text: "Fortune Not Found: Abort, Retry, Ignore?",
-        fromUserId: 1,
-        toUserId: 1
-      },
-      {
-        text: "About time I got out of that cookie",
-        fromUserId: 1,
-        toUserId: 1
-      },
-      {
-        text:
-          "The early bird gets the worm, but the second mouse gets the cheese",
-        fromUserId: 1,
-        toUserId: 1
-      },
-      {
-        text:
-          "Be on alert to recognize your prime at whatever time of your life it may occur",
-        fromUserId: 1,
-        toUserId: 1
-      },
-      {
-        text: "Your road to glory will be rocky, but fulfilling",
-        fromUserId: 1,
-        toUserId: 1
-      },
-      {
-        text:
-          "Courage is not simply one of the virtues, but the form of every virtue at the testing point",
-        fromUserId: 1,
-        toUserId: 1
-      }
-    ]).then(function() {
-      app.listen(PORT, function() {
-        console.log("listening on port " + PORT);
+  if (syncOptions.force) {
+    db.User.create({
+      name: "site",
+      address: "cookie",
+      platform: "web"
+    }).then(function() {
+      db.Fortune.bulkCreate([
+        {
+          text: "Fortune Not Found: Abort, Retry, Ignore?",
+          fromUserId: 1,
+          toUserId: 1
+        },
+        {
+          text: "About time I got out of that cookie",
+          fromUserId: 1,
+          toUserId: 1
+        },
+        {
+          text:
+            "The early bird gets the worm, but the second mouse gets the cheese",
+          fromUserId: 1,
+          toUserId: 1
+        },
+        {
+          text:
+            "Be on alert to recognize your prime at whatever time of your life it may occur",
+          fromUserId: 1,
+          toUserId: 1
+        },
+        {
+          text: "Your road to glory will be rocky, but fulfilling",
+          fromUserId: 1,
+          toUserId: 1
+        },
+        {
+          text:
+            "Courage is not simply one of the virtues, but the form of every virtue at the testing point",
+          fromUserId: 1,
+          toUserId: 1
+        }
+      ]).then(function() {
+        app.listen(PORT, function() {
+          console.log("listening on port " + PORT);
+        });
       });
     });
-  });
+  }
 });
 
 module.exports = app;

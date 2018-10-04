@@ -1,5 +1,6 @@
 var db = require("../models");
-var badWord = require("../lib/wordfilter.js")
+var wordFilter = require("../lib/wordfilter.js");
+var slackbot = require("../lib/slackbot.js");
 
 module.exports = function (app) {
 
@@ -170,9 +171,18 @@ module.exports = function (app) {
               isRead: false
             }
           }).then(function(unreadFortuneData){
-            // UPDATE fortune to be read
             console.log("UNREAD FORTUNE     " + unreadFortuneData);
             // Code to notify user based on platform goes here
+            if(recipientId!==1){
+              if(randomUser.platform==="slack"){
+                slackbot.sendMessage(randomUser.name, "You have a fortune waiting for you...\nType slash create to send someone else a fortune before you can read yours!")
+              }
+              else if(randomUser.plaform==="email"){
+                // Code to notify email user here
+
+
+              }
+            }
           });
         res.json(data);
       });

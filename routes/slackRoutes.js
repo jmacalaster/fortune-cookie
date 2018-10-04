@@ -1,7 +1,9 @@
 var axios = require("axios");
 var db = require("../models");
+var bot = require("../lib/slackbot.js");
 
 var env_token = process.env.BOT_ACCESS_TOKEN;
+var cookie_line = "\n\n:fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie:\n"
 
 module.exports = function (app) {
   app.post("/slack/actions/submit", function (req, res) {
@@ -19,20 +21,21 @@ module.exports = function (app) {
           text: text,
           fromUserId: data.id
         }).then(function (response) {
-          // New fortune posted with no error
+          console.log(response);
           res.status(200).send();
-          // Send a chat message in response
-          axios.post("https://slack.com/api/chat.postMessage", {
-            // channel_id,
-            channel: user,
-            text: "Thanks a bunch! You’re super awesome!"
-          },
-          {
-            headers: { Authorization: `Bearer ${env_token}` }
-          }).then(function (messageRes){
-
-          }).catch(function (err){
-            console.error(err);
+          db.Fortune.findOne({
+            where: {
+              toUserId: data.id,
+              isRead: false
+            }
+          }).then(function (fortuneData){
+            if(fortuneData){
+              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you..." + cookie_line + fortuneData.text + "\n\n");
+              axios.put(req.protocol + "://" + req.hostname + "/api/fortunes/" + fortuneData.id + "/read");
+            }
+            else{
+              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nThere are none currently waiting for you, but if the fates conspire to bring you one, we'll let you know.");
+            }
           });
         }).catch(function (err) {
           console.error(err);
@@ -73,7 +76,7 @@ app.post("/slack/commands/signup", (req, res) => {
   });
 });
 
-app.post("/slack/commands/create/fc", (req, res) => {
+app.post("/slack/commands/create", (req, res) => {
   let { token, text, username, command, response_url, trigger_id, user_id, channel_name, channel_id } = req.body
 
   axios.post(`https://slack.com/api/dialog.open`, {
