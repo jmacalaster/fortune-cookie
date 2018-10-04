@@ -35,6 +35,10 @@ module.exports = function (app) {
       }
     }).then(function (data) {
       if (data) {
+        if(text.trim()===""){
+          bot.postMessageToUser(data.name, "Your fortune cannot be empty!");
+          return;
+        }
         // Post new fortune
         axios.post(req.protocol + "://" + req.hostname + "/api/fortunes", {
           text: text,
