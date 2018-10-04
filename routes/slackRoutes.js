@@ -6,20 +6,20 @@ var env_token = process.env.BOT_ACCESS_TOKEN;
 var cookie_line = "\n\n:fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie::fortune_cookie:\n"
 
 function luckyNumbers(user){
-  if(Math.random()<0.9){ return; }
+  if(Math.random()<0.9){ return; } // The user will receive a "Lucky Numbers" message only 10% of the time.
   var numbers = [];
   for(var i=0; i<6; i++){
     numbers.push(Math.floor(Math.random()*99)+1);
   }
-  bot.sendMessage(user, cookie_line + "Your lucky numbers: " + numbers.join(", "));
+  bot.postMessageToUser(user, cookie_line + "Your lucky numbers: " + numbers.join(", "));
 }
 
 function learnChinese(user){
-  //if(Math.random()<0.9){ return; }
-  var lesson = Math.floor(Math.random()*382);
+  //if(Math.random()<0.9){ return; } // The user will receive a "Learn Chinese" message only 10% of the time.
+  var lesson = Math.floor(Math.random()*382); // There are 382 possible lessons in the database
   axios.get("http://fortunecookieapi.herokuapp.com/v1/lessons?limit=1&skip=" + lesson).then(function(response){
-    bot.sendMessage(user, cookie_line +
-      response.chinese + "\n" + response.pronunciation + "\n" + response.english);
+    bot.postMessageToUser(user, cookie_line +
+      "Learn Chinese!\n" + response.chinese + "\n" + response.pronunciation + "\n" + response.english);
   });
 }
 
@@ -48,14 +48,14 @@ module.exports = function (app) {
             }
           }).then(function (fortuneData){
             if(fortuneData){
-              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you..." + cookie_line + fortuneData.text + "\n\n").then(function(){
+              bot.postMessageToUser(data.name, "Your fortune has been sent to another user!\nHere's one that's been waiting for you..." + cookie_line + fortuneData.text + "\n\n").then(function(){
                 luckyNumbers(data.name);
                 learnChinese(data.name);
               });
               axios.put(req.protocol + "://" + req.hostname + "/api/fortunes/" + fortuneData.id + "/read");
             }
             else{
-              bot.sendMessage(data.name, "Your fortune has been sent to another user!\nThere are none currently waiting for you, but if the fates conspire to bring you one, we'll let you know.");
+              bot.postMessageToUser(data.name, "Your fortune has been sent to another user!\nThere are none currently waiting for you, but if the fates conspire to bring you one, we'll let you know.");
             }
           });
         }).catch(function (err) {

@@ -175,7 +175,7 @@ module.exports = function (app) {
             // Code to notify user based on platform goes here
             if(recipientId!==1){
               if(randomUser.platform==="slack"){
-                slackbot.sendMessage(randomUser.name, "You have a fortune waiting for you...\nType slash create to send someone else a fortune before you can read yours!")
+                slackbot.postMessageToUser(randomUser.name, "You have a fortune waiting for you...\nType slash create to send someone else a fortune before you can read yours!")
               }
               else if(randomUser.plaform==="email"){
                 // Code to notify email user here
