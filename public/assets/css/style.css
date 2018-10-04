@@ -73,3 +73,13 @@ a:visited{
 .three-steps {
     padding: 100px;
 }
+
+@media only screen and (max-width: 375px) {
+    .fortune-text {
+        padding-left: 0;
+        font-size: 8px;
+    }
+    .navbar-brand {
+        margin-left: -180px;
+    }
+}
