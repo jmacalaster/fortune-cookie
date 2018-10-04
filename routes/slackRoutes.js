@@ -18,9 +18,9 @@ function learnChinese(user){
   //if(Math.random()<0.9){ return; } // The user will receive a "Learn Chinese" message only 10% of the time.
   var lesson = Math.floor(Math.random()*382); // There are 382 possible lessons in the database
   axios.get("http://fortunecookieapi.herokuapp.com/v1/lessons?limit=1&skip=" + lesson).then(function(response){
-    console.log(response);
+    var data = response.data[0];
     bot.postMessageToUser(user, cookie_line +
-        "Learn Chinese!\n" + response[0].chinese + "\n" + response[0].pronunciation + "\n" + response[0].english);
+        "Learn Chinese!\n" + data.chinese + "\n" + data.pronunciation + "\n" + data.english);
     });
 }
 
