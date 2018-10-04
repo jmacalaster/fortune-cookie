@@ -1,6 +1,7 @@
 var db = require("../models");
 var wordFilter = require("../lib/wordfilter.js");
 var slackbot = require("../lib/slackbot.js");
+var mailer = require("../lib/email");
 
 module.exports = function (app) {
 
