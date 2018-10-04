@@ -1,6 +1,8 @@
 .navbar {
     padding: 50px 20px 50px 20px;
     position: relative;
+    background-color: #3F4963;
+    color: #ffffff;
 }
 
 .navbar-brand {
@@ -14,8 +16,8 @@
 }
 
 body {
-    background-color: #3F4963;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #3F4963;
 }
 
 #logo {
@@ -33,8 +35,8 @@ a:visited{
 }
 
 .page-footer {
-    background-color: #ffffff;
-    color: #3F4963;
+    background-color: #3F4963;
+    color: #ffffff;
 }
 
 #footer-top {
@@ -59,11 +61,15 @@ a:visited{
 }
 
 .fortune-text {
-    font-size: 18pt;
+    font-size: 16pt;
     color: #FF6376;
     position: absolute;
     top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding-left: 120px;
+}
+
+.three-steps {
+    padding: 100px;
 }
