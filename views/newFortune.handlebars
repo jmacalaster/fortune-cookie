@@ -1,8 +1,19 @@
-<div class="form-group">
-  <label for="fortune-text" class="col-form-label">Please write someone's fortune to see your own:</label>
-  <textarea class="form-control" id="fortune-text"></textarea>
-</div> 
-<button id="save" type="button" class="btn btn-primary">Save fortune</button>
+<div class="get-fortune-page">
+
+  <div class="container fortune-container">
+    <div class="container fortune-div">
+      <img class="fortune-image" src="/assets/images/Fortune-Cookie-Gif.png" alt="Fortune">
+        <div class="centered fortune-text">
+          What fortune will you share with the world today?
+        </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="fortune-text" class="col-form-label">Please write someone's fortune to see your own:</label>
+    <textarea class="form-control" id="fortune-text"></textarea>
+  </div> 
+  <button id="save" type="button" class="btn btn-primary">Save fortune</button>
+
 <script>
 $("#save").on("click", function() {
   var text = $("#fortune-text")
