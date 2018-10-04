@@ -6,7 +6,7 @@ For information on how to install our app on Slack or how to use it via email & 
 ## Project Details
 This project was coded for the Columbia Full Stack Web Development Coding Bootcamp by [Sandy Yeung](), [Evan Ross](), [Julia Macalaster](), and [Kenneth Postigo]().
 
-##Preview
+## Preview
 ![](public/assets/images/fortunebot.gif)
 
 ## Technologies
