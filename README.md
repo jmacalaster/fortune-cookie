@@ -4,7 +4,7 @@
 For information on how to install our app on Slack or how to use it via email & web instead, check out [our website](https://fortune-cookie-bot.herokuapp.com).
 
 ## Project Details
-This project was coded for the Columbia Full Stack Web Development Coding Bootcamp by [Sandy Yeung](), [Evan Ross](), [Julia Macalaster](), and [Kenneth Postigo]().
+This project was coded for the Columbia Full Stack Web Development Coding Bootcamp by [Sandy Yeung](https://www.sandynism.github.io), [Evan Ross](https://evansimonross.github.io/), [Julia Macalaster](https://www.juliamacalaster.com), and [Kenneth Postigo](https://www.kennethpostigo.me/).
 
 ## Preview
 ![](public/assets/images/fortunebot.gif)
