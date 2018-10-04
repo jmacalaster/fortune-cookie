@@ -1,0 +1,67 @@
+<div class="form-group">
+  <label for="name" class="col-form-label">Name:</label>
+  <input type="text" class="form-control" id="name"><br>
+
+  <label for="email" class="col-form-label">Email:</label>
+  <input type="text" class="form-control" id="email"><br>
+
+  <label for="fortune-text" class="col-form-label">Please write someone's fortune to see your own:</label>
+  <textarea class="form-control" id="fortune-text"></textarea>
+</div>
+
+<button id="save" type="button" class="btn btn-primary">Save fortune</button>
+
+<div class="modal" tabindex="-1" role="dialog" id="confirmation-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thanks for signing up!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Check your inbox for an email containing the link to your fortune from fortunecookie.mailer@yahoo.com!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $("#save").on("click", function () {
+    var name = $("#name").val().trim();
+    var email = $("#email").val().trim();
+    var fortune = $("#fortune-text").val().trim();
+
+    if ((name !== "") && (email !== "") && (fortune !== "")) {
+      $.ajax({
+        url: "/api/users",
+        method: "POST",
+        data: {
+          name: name,
+          address: email,
+          platform: "email"
+        }
+      }).then(function () {
+        $.ajax({
+          url: "/api/fortunes",
+          method: "POST",
+          data: {
+            text: fortune,
+            fromUserId: "{{user}}"
+          }
+        });
+      }).then(function () {
+        $.ajax({
+          url: "/api/fortunes/{{id}}/read",
+          method: "PUT",
+          data: {}
+        }).then(function() {
+          location.reload();
+        });
+      });
+    }
+  }).then(function() {
+    $("#confirmation-modal").modal('show');
+  });
+</script>
