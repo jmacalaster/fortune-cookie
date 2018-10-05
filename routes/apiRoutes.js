@@ -155,10 +155,31 @@ module.exports = function (app) {
           if(randomUser.platform==="slack"){
             slackbot.postMessageToUser(randomUser.name, "You have a fortune waiting for you...\nType slash create to send someone else a fortune before you can read yours!")
           }
-          else if(randomUser.plaform==="email"){
-            // TODO: notify email user here
-
-
+          else if (randomUser.plaform === "email") {
+            // url to fortune for random user
+            let url = "https://fortune-cookie-bot.herokuapp.com/fortunes/" + data.id;
+            // message for random user
+            let message = {
+              from: '"Fortune Cookie 🥠" <fortunecookie.mailer@yahoo.com>',
+              to: randomUser.address,
+              subject: 'Your Fortune Awaits!',
+              text: "Hi " + randomUser.name + ",  Go to the following link to view your fortune! " + url,
+              html:
+                '<p><b>Hi ' + randomUser.name + '!</b></p>' +
+                '<p>Someone special has sent you a fortune! Click on the link below to view it! Thanks for using Fortune Cookie Bot!</p>' +
+                '<p><a href="' + url + '"><b>View Fortune!</b></a></p>'
+            };
+            // send message to random user
+            mailer.sendMail(message, (error, info) => {
+              if (error) {
+                console.log('Error sending email to ' + randomUser.name);
+                console.log(error.message);
+                return process.exit(1);
+              }
+              
+              console.log('Email sent to ' + randomUser.name + '!');
+              mailer.close();
+            });
           }
         }
         // The user who sent the fortune can now receive a new one.
