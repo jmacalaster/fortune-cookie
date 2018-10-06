@@ -42,26 +42,21 @@
           address: email,
           platform: "email"
         }
-      }).then(function () {
+      }).then(function (data) {
         $.ajax({
           url: "/api/fortunes",
           method: "POST",
           data: {
             text: fortune,
-            fromUserId: "{{user}}"
+            fromUserId: data.id
           }
-        });
-      }).then(function () {
-        $.ajax({
-          url: "/api/fortunes/{{id}}/read",
-          method: "PUT",
-          data: {}
-        }).then(function() {
-          location.reload();
+        }).then(function () {
+          $("#confirmation-modal").modal('show');
+          $("#name").val("");
+          $("#email").val("");
+          $("#fortune-text").val("");
         });
       });
     }
-  }).then(function() {
-    $("#confirmation-modal").modal('show');
   });
 </script>
