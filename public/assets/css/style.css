@@ -72,12 +72,16 @@ a:visited{
 
 .three-steps {
     padding: 100px;
+    padding-top: 0px;
+}
+
+label {
+    margin-left: 25px;
 }
 
 textarea, input[type="text"] {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 25px;
     max-width: 768px;
 }
 
