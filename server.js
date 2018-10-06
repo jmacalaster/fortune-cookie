@@ -21,7 +21,7 @@ require("./routes/slackRoutes")(app);
 
 var db = require("./models");
 
-var syncOptions = { force: true };
+var syncOptions = { force: false };
 
 if (process.env.NODE_ENV === "test") {
   syncOptions.force = true;
@@ -74,6 +74,11 @@ db.sequelize.sync(syncOptions).then(function() {
           console.log("listening on port " + PORT);
         });
       });
+    });
+  }
+  else{
+    app.listen(PORT, function() {
+      console.log("listening on port " + PORT);
     });
   }
 });

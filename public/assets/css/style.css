@@ -72,8 +72,22 @@ a:visited{
 
 .three-steps {
     padding: 100px;
+    padding-top: 0px;
 }
 
+label {
+    margin-left: 25px;
+}
+
+textarea, input[type="text"] {
+    display: block;
+    margin-left: 25px;
+    max-width: 768px;
+}
+
+button {
+    margin: 25px;
+}
 
 @media only screen and (max-width: 768px) {
     .fortune-text {

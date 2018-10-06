@@ -24,6 +24,11 @@ module.exports = function(app) {
     });
   });
 
+  // Load signup page
+  app.get("/signup", function(req, res) {
+    res.render("signup", {});
+  });
+
   // Load one specific fortune (can add a different template later if needed)
   app.get("/fortunes/:id", function(req, res) {
     db.Fortune.findOne({ where: { id: req.params.id } }).then(function(data) {
