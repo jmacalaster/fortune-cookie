@@ -76,6 +76,11 @@ db.sequelize.sync(syncOptions).then(function() {
       });
     });
   }
+  else{
+    app.listen(PORT, function() {
+      console.log("listening on port " + PORT);
+    });
+  }
 });
 
 module.exports = app;
