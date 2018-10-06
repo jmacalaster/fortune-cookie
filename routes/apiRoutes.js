@@ -155,9 +155,9 @@ module.exports = function (app) {
           if(randomUser.platform==="slack"){
             slackbot.postMessageToUser(randomUser.name, "You have a fortune waiting for you...\nType slash create to send someone else a fortune before you can read yours!")
           }
-          else if (randomUser.plaform === "email") {
+          else if (randomUser.platform === "email") {
             // url to fortune for random user
-            let url = "https://fortune-cookie-bot.herokuapp.com/fortunes/" + data.id;
+            let url = req.protocol + "://" + req.hostname + "/fortunes/" + data.id;
             // message for random user
             let message = {
               from: '"Fortune Cookie 🥠" <fortunecookie.mailer@yahoo.com>',
